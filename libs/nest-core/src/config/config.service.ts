@@ -1,0 +1,33 @@
+import { Injectable } from '@nestjs/common';
+import { ConfigService as NestConfigService } from '@nestjs/config';
+import { LogLevels } from '../logger/logger.enum';
+import { IConfigService } from './config.adapter';
+
+@Injectable()
+export class ConfigService extends NestConfigService implements IConfigService {
+  constructor() {
+    super();
+  }
+
+  ELK_URL = this.get('ELK_URL');
+
+  CACHE_ENABLED = this.get('CACHE_ENABLED') === 'true';
+
+  MONGO_EXPRESS_URL = this.get('MONGO_EXPRESS_URL');
+  REDIS_COMMANDER_URL = this.get('REDIS_COMMANDER_URL');
+  JEAGER_URL = this.get('JEAGER_URL');
+  KIBANA_URL = this.get('KIBANA_URL');
+
+  REDIS_URL = this.get('REDIS_URL');
+
+  ENV = this.get('ENV');
+
+  LOG_LEVEL = this.get<LogLevels>('LOG_LEVEL');
+
+  database = {
+    host: this.get('MONGO_HOST'),
+    port: this.get<number>('MONGO_PORT'),
+    user: this.get('MONGO_INITDB_ROOT_USERNAME'),
+    pass: this.get('MONGO_INITDB_ROOT_PASSWORD'),
+  };
+}
