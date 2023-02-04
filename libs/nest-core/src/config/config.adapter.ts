@@ -6,21 +6,16 @@ export abstract class IConfigService {
   CACHE_ENABLED: boolean | undefined;
   REDIS_URL: string | undefined;
 
-  ELK_URL: string | undefined;
-
-  MONGO_EXPRESS_URL: string | undefined;
-  JEAGER_URL: string | undefined;
-  REDIS_COMMANDER_URL: string | undefined;
-  KIBANA_URL: string | undefined;
-
   LOG_LEVEL: LogLevels | undefined;
 
-  database:
+  TYPEORM:
     | {
-        host: string | undefined;
-        port: number | undefined;
-        user: string | undefined;
-        pass: string | undefined;
+        HOST: string | undefined;
+        PORT: number | undefined;
+        USER: string | undefined;
+        PASS: string | undefined;
+        DATABASE: string | undefined;
+        LOGGING: boolean | undefined;
       }
     | undefined;
 }

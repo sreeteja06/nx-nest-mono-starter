@@ -24,10 +24,12 @@ export class ConfigService extends NestConfigService implements IConfigService {
 
   LOG_LEVEL = this.get<LogLevels>('LOG_LEVEL');
 
-  database = {
-    host: this.get('MONGO_HOST'),
-    port: this.get<number>('MONGO_PORT'),
-    user: this.get('MONGO_INITDB_ROOT_USERNAME'),
-    pass: this.get('MONGO_INITDB_ROOT_PASSWORD'),
+  TYPEORM = {
+    HOST: this.get('TYPEORM_HOST'),
+    PORT: this.get<number>('TYPEORM_PORT'),
+    USER: this.get('TYPEORM_USERNAME'),
+    PASS: this.get('TYPEORM_PASSWORD'),
+    DATABASE: this.get('TYPEORM_DATABASE'),
+    LOGGING: this.get('TYPEORM_LOGGING') === 'true',
   };
 }

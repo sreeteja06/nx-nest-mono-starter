@@ -3,9 +3,26 @@ import { LoggerModule as PinoLoggerModule } from 'nestjs-pino';
 import { IConfigService } from '../config/config.adapter';
 import { ConfigModule } from '../config/config.module';
 import { LogLevels } from './logger.enum';
-import { Request } from 'express';
 import { v4 as uuidV4 } from 'uuid';
 import pinoTransport from './pino.transport';
+import { IncomingMessage } from 'http';
+
+const mapLogLevel = (
+  logLevel: LogLevels
+): 'fatal' | 'error' | 'warn' | 'info' | 'debug' | 'trace' => {
+  switch (logLevel) {
+    case LogLevels.DEBUG:
+      return 'debug';
+    case LogLevels.LOG:
+      return 'info';
+    case LogLevels.WARN:
+      return 'warn';
+    case LogLevels.ERROR:
+      return 'error';
+    case LogLevels.VERBOSE:
+      return 'trace';
+  }
+};
 
 @Module({
   imports: [
@@ -14,10 +31,10 @@ import pinoTransport from './pino.transport';
       useFactory: (configService: IConfigService) => ({
         pinoHttp: [
           {
-            level: configService.LOG_LEVEL || LogLevels.LOG,
+            useLevel: mapLogLevel(configService.LOG_LEVEL ?? LogLevels.LOG),
             redact: ['req.headers.authorization'],
             quietReqLogger: true,
-            genReqId: (req: Request): string => {
+            genReqId: (req: IncomingMessage): string => {
               if (req.headers['x-request-id']) {
                 if (typeof req.headers['x-request-id'] === 'string') {
                   return req.headers['x-request-id'];
@@ -33,7 +50,7 @@ import pinoTransport from './pino.transport';
               },
             },
           },
-          pinoTransport({}),
+          pinoTransport(),
         ],
         exclude: [{ method: RequestMethod.GET, path: 'api/healthz' }],
       }),

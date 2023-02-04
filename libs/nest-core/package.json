@@ -1,21 +1,5 @@
 {
   "name": "@sreeteja06/nest-core",
   "version": "0.0.1",
-  "type": "commonjs",
-  "dependencies": {
-    "@nestjs/config": "2.3.0",
-    "@sentry/integrations": "^7.36.0",
-    "@sentry/node": "^7.36.0",
-    "@sentry/tracing": "^7.36.0",
-    "ioredis": "^5.3.0",
-    "pino-http": "^8.3.2",
-    "pump": "^3.0.0",
-    "readable-stream": "^4.3.0",
-    "secure-json-parse": "^2.7.0",
-    "sonic-boom": "^3.2.1",
-    "uuid": "^9.0.0"
-  },
-  "devDependencies": {
-    "@types/uuid": "^9.0.0"
-  }
+  "type": "commonjs"
 }
