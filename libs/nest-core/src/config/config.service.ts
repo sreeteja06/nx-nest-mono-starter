@@ -32,4 +32,6 @@ export class ConfigService extends NestConfigService implements IConfigService {
     DATABASE: this.get('TYPEORM_DATABASE'),
     LOGGING: this.get('TYPEORM_LOGGING') === 'true',
   };
+
+  SENTRY_ENABLED = this.get('SENTRY_ENABLED') === 'true';
 }

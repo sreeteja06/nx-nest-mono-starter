@@ -50,7 +50,7 @@ const mapLogLevel = (
               },
             },
           },
-          pinoTransport(),
+          pinoTransport(configService.SENTRY_ENABLED),
         ],
         exclude: [{ method: RequestMethod.GET, path: 'api/healthz' }],
       }),

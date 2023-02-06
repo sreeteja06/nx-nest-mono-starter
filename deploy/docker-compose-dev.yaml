@@ -1,0 +1,38 @@
+version: '3.9'
+
+services:
+  db:
+    image: postgres:14.5-bullseye
+    hostname: nx_mono-db
+    environment:
+      POSTGRES_PASSWORD: 'jdsajdWJDJNVsdjvdf432kvdsnj43'
+      POSTGRES_USER: 'nx_mono'
+      POSTGRES_DB: 'nx_mono-gateway'
+    volumes:
+      - nx_mono-db-data:/var/lib/postgresql/data
+    restart: always
+    healthcheck:
+      test: pg_isready -U nx_mono_develop
+      interval: 2s
+      timeout: 3s
+      retries: 40
+    ports:
+      - '5432:5432'
+
+  redis:
+    image: bitnami/redis:6.2.5
+    hostname: nx_mono-redis
+    restart: always
+    environment:
+      ALLOW_EMPTY_PASSWORD: 'yes'
+    healthcheck:
+      test: redis-cli ping
+      interval: 1s
+      timeout: 3s
+      retries: 30
+    ports:
+      - '6379:6379'
+
+volumes:
+  nx_mono-db-data:
+    name: nx_mono-db-data

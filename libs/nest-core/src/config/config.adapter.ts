@@ -18,4 +18,6 @@ export abstract class IConfigService {
         LOGGING: boolean | undefined;
       }
     | undefined;
+
+  SENTRY_ENABLED?: boolean;
 }

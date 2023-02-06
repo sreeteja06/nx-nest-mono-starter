@@ -24,19 +24,24 @@ export class TypeOrmModule {
       imports: [
         NestTypeOrmModule.forRootAsync({
           imports: [ConfigModule],
-          useFactory: (configService: IConfigService) => ({
-            appname: options.appName,
-            type: <any>options.type,
-            host: configService.TYPEORM?.HOST,
-            port: configService.TYPEORM?.PORT,
-            username: configService.TYPEORM?.USER,
-            password: configService.TYPEORM?.PASS,
-            database: configService.TYPEORM?.DATABASE,
-            entities: options.entities,
-            // Logs slow queries (queries that take more than 1 second)
-            maxQueryExecutionTime: options.maxQueryExecutionTime || 1000,
-            logger: new TypeormLogger(configService.TYPEORM?.LOGGING),
-          }),
+          useFactory: (configService: IConfigService) => {
+            if (!configService.TYPEORM?.HOST) {
+              throw new Error('TYPEORM_HOST is not defined');
+            }
+            return {
+              appname: options.appName,
+              type: <any>options.type,
+              host: configService.TYPEORM?.HOST,
+              port: configService.TYPEORM?.PORT,
+              username: configService.TYPEORM?.USER,
+              password: configService.TYPEORM?.PASS,
+              database: configService.TYPEORM?.DATABASE,
+              entities: options.entities,
+              // Logs slow queries (queries that take more than 1 second)
+              maxQueryExecutionTime: options.maxQueryExecutionTime || 1000,
+              logger: new TypeormLogger(configService.TYPEORM?.LOGGING),
+            };
+          },
           inject: [IConfigService],
         }),
       ],

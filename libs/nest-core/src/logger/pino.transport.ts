@@ -60,18 +60,22 @@ const applyColor = (level: string | undefined, data: string): string => {
     case LogLevels.WARN:
       return colorString(Color.FgYellow, data);
     case LogLevels.LOG:
+    case 'info':
       return colorString(Color.FgGreen, data);
     case LogLevels.DEBUG:
       return colorString(Color.FgCyan, data);
     case LogLevels.VERBOSE:
       return colorString(Color.FgMagenta, data);
     default:
-      return data;
+      return `${data}\n`;
   }
 };
 
-const transformLog = (input: string): string => {
-  let level: LogLevels | undefined = undefined;
+const transformLog = (
+  input: string,
+  sentryEnabled: boolean | undefined
+): string => {
+  let level: LogLevels | 'info' | undefined = undefined;
   if (!isObject(input)) {
     const parsed = jsonParser(input);
     if (parsed.err || !isObject(parsed.value)) {
@@ -94,41 +98,43 @@ const transformLog = (input: string): string => {
         e = new Error(parsed.value);
       }
 
-      withScope((scope) => {
-        scope.setExtra('extraData', parsed.value);
-        if (parsed.value?.reqId) {
-          scope.setTag('reqId', parsed.value?.reqId);
-        }
-        if (parsed.value?.userId) {
-          scope.setUser({ id: parsed.value?.userId });
-        }
-        if (parsed.value?.err?.sql || parsed.value?.error?.sql) {
-          const type = parsed.value?.error?.sql ? 'raw-sql' : 'sql';
-          scope.setTag(type, true);
-          scope.addBreadcrumb({
-            type,
-            level: 'error',
-            message:
-              type === 'sql'
-                ? parsed.value?.err?.message
-                : parsed.value?.error?.sqlMessage,
-            category:
-              type === 'sql'
-                ? parsed.value?.err?.code
-                : parsed.value?.error?.code,
-            data: {},
-          });
-        }
-        sentry.captureException(e);
-      });
+      if (sentryEnabled) {
+        withScope((scope) => {
+          scope.setExtra('extraData', parsed.value);
+          if (parsed.value?.reqId) {
+            scope.setTag('reqId', parsed.value?.reqId);
+          }
+          if (parsed.value?.userId) {
+            scope.setUser({ id: parsed.value?.userId });
+          }
+          if (parsed.value?.err?.sql || parsed.value?.error?.sql) {
+            const type = parsed.value?.error?.sql ? 'raw-sql' : 'sql';
+            scope.setTag(type, true);
+            scope.addBreadcrumb({
+              type,
+              level: 'error',
+              message:
+                type === 'sql'
+                  ? parsed.value?.err?.message
+                  : parsed.value?.error?.sqlMessage,
+              category:
+                type === 'sql'
+                  ? parsed.value?.err?.code
+                  : parsed.value?.error?.code,
+              data: {},
+            });
+          }
+          sentry.captureException(e);
+        });
+      }
     }
   } else {
-    level = LogLevels.LOG;
+    level = 'info';
   }
   return applyColor(level, input);
 };
 
-function pinoTransport(): any {
+function pinoTransport(sentryEnabled: boolean | undefined): any {
   return abstractTransport(
     function (source: {
       on: (arg0: string, arg1: (line: any) => void) => void;
@@ -141,7 +147,7 @@ function pinoTransport(): any {
           enc: any,
           cb: (arg0: null, arg1: string) => void
         ): void {
-          const line = transformLog(chunk);
+          const line = transformLog(chunk, sentryEnabled);
           cb(null, line);
         },
       });
