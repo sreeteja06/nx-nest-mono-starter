@@ -19,5 +19,21 @@ export abstract class IConfigService {
       }
     | undefined;
 
-  SENTRY_ENABLED?: boolean;
+  SWAGGER:
+    | {
+        USERNAME: string | undefined;
+        PASSWORD: string | undefined;
+      }
+    | undefined;
+
+  SENTRY:
+    | {
+        DSN: string | undefined;
+        ENABLED: boolean | undefined;
+        SAMPLE_RATE: number | undefined;
+        TRACE_SAMPLE_RATE: number | undefined;
+      }
+    | undefined;
+
+  PORT?: number;
 }

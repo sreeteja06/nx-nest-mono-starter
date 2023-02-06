@@ -1,11 +1,7 @@
-/**
- * This is not a production server yet!
- * This is only a minimal backend to get started.
- */
-
-import { Logger as NestLogger } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
-import { Logger } from '@sreeteja06/nest-core';
+import { appBootstrap } from '@sreeteja06/nest-core';
+import helmet from 'helmet';
+import project from '../project.json';
 
 import { AppModule } from './app/app.module';
 
@@ -14,19 +10,13 @@ async function bootstrap() {
     bufferLogs: true,
   });
 
-  app.useLogger(app.get(Logger));
+  app.use(helmet());
 
-  const globalPrefix = 'api';
+  app.enableCors({
+    origin: '*',
+  });
 
-  app.setGlobalPrefix(globalPrefix);
-
-  const port = process.env.PORT || 3333;
-
-  await app.listen(port);
-
-  NestLogger.log(
-    `🚀 Application is running on: http://localhost:${port}/${globalPrefix}`
-  );
+  appBootstrap(app, project.name);
 }
 
 bootstrap();

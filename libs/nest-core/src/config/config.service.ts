@@ -9,7 +9,7 @@ export class ConfigService extends NestConfigService implements IConfigService {
     super();
   }
 
-  ELK_URL = this.get('ELK_URL');
+  PORT = Number(this.get('PORT'));
 
   CACHE_ENABLED = this.get('CACHE_ENABLED') === 'true';
 
@@ -33,5 +33,15 @@ export class ConfigService extends NestConfigService implements IConfigService {
     LOGGING: this.get('TYPEORM_LOGGING') === 'true',
   };
 
-  SENTRY_ENABLED = this.get('SENTRY_ENABLED') === 'true';
+  SENTRY = {
+    DSN: this.get('SENTRY_DSN'),
+    ENABLED: this.get('SENTRY_ENABLED') === 'true',
+    SAMPLE_RATE: this.get<number>('SENTRY_SAMPLE_RATE'),
+    TRACE_SAMPLE_RATE: this.get<number>('SENTRY_TRACE_SAMPLE_RATE'),
+  };
+
+  SWAGGER = {
+    USERNAME: this.get('SWAGGER_USERNAME'),
+    PASSWORD: this.get('SWAGGER_PASSWORD'),
+  };
 }
