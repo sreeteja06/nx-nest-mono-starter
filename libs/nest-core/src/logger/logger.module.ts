@@ -33,7 +33,7 @@ const mapLogLevel = (
           {
             useLevel: mapLogLevel(configService.LOG_LEVEL ?? LogLevels.LOG),
             redact: ['req.headers.authorization'],
-            quietReqLogger: true,
+            quietReqLogger: configService.LOG_LEVEL !== LogLevels.VERBOSE,
             genReqId: (req: IncomingMessage): string => {
               if (req.headers['x-request-id']) {
                 if (typeof req.headers['x-request-id'] === 'string') {

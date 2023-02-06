@@ -83,6 +83,12 @@ const transformLog = (
       level = LogLevels.LOG;
     }
     level = parsed.value?.level ?? LogLevels.LOG;
+
+    if (parsed.value?.time) {
+      parsed.value.time = new Date(parsed.value.time).toISOString();
+      input = JSON.stringify(parsed.value);
+    }
+
     if (level === LogLevels.ERROR) {
       let e: Error | undefined = undefined;
 
