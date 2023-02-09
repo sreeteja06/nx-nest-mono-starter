@@ -16,7 +16,8 @@ export class TypeOrmModule {
   static forRoot(options: {
     appName: string;
     type: DataSourceOptions['type'];
-    entities: MixedList<string | EntitySchema<any>>;
+    entities?: MixedList<string | EntitySchema<any>>;
+    autoLoadEntities?: boolean;
     maxQueryExecutionTime?: number; // 1000ms
   }): DynamicModule {
     return {
@@ -37,6 +38,7 @@ export class TypeOrmModule {
               password: configService.TYPEORM?.PASS,
               database: configService.TYPEORM?.DATABASE,
               entities: options.entities,
+              autoLoadEntities: options.autoLoadEntities || false,
               // Logs slow queries (queries that take more than 1 second)
               maxQueryExecutionTime: options.maxQueryExecutionTime || 1000,
               logger: new TypeormLogger(configService.TYPEORM?.LOGGING),

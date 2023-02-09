@@ -3,6 +3,6 @@ export type AxiosRequestData = {
 };
 
 export type HttpRetryConfig = {
-  count: number,
-  delayMultiplier: number,
+  count: number;
+  delayMultiplier: number;
 };
