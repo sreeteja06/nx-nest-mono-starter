@@ -7,4 +7,6 @@ export * from './logger';
 export * from './http';
 export * from './typeorm';
 
+export * from './common';
+
 export * from './app-bootstrap';
