@@ -19,3 +19,22 @@ Run `npx nx connect-to-nx-cloud` to enable [remote caching](https://nx.app) and 
 ## Further help
 
 Visit the [Nx Documentation](https://nx.dev) to learn more.
+
+## Roadmap
+
+- [ ] Add a `README.md` to each application
+- [ ] Add a `README.md` to each library
+- [ ] Validate configuration schema
+- [ ] Add https://www.npmjs.com/package/@jscutlery/semver
+- [ ] Add Rate Limiting
+- [ ] Add Swagger Docs
+- [ ] Combine all Swagger Docs into one
+- [ ] Add Dockerfile for each application
+- [ ] Add Docker Compose file
+- [ ] Add Interceptors
+- [ ] Add Guards
+- [ ] Add Filters
+- [ ] Add Migrations for each application
+- [ ] Complete API Gateway
+- [ ] Add RabbitMQ
+- [ ] Add Kafka

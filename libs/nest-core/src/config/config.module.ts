@@ -3,7 +3,6 @@ import { ConfigModule as NestConfigModule } from '@nestjs/config';
 import { IConfigService } from './config.adapter';
 import { ConfigService } from './config.service';
 
-// TODO: VALIDATE CONFIG SCHEMA
 @Module({
   imports: [
     NestConfigModule.forRoot({
